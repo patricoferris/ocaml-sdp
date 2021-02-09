@@ -1,0 +1,214 @@
+name: OCaml-CI
+on: [push, pull_request]
+jobs:
+  macos_and_windows:
+    strategy:
+      matrix:
+        operating-system: [macos-latest, windows-latest]
+        ocaml-version: [4.11.1]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: avsm/setup-ocaml@v1
+      with:
+        ocaml-version: ${{ matrix.ocaml-version }}
+    - name: Pinning Package
+      run: opam pin add -yn sdp.dev './'
+    - name: Packages
+      run: opam depext -yt sdp.dev
+    - name: Dependencies
+      run: opam install -t -y . --deps-only
+    - name: Building, Installing and Testing
+      run: opam exec -- dune build @install @runtest
+  debian_10_buster:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:b9ad0ce4811d068fffcbc01dc89577faedf4eddf819bfd9e9ee994bfd2c9f2aa
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn sdp.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt sdp.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+  alpine_3_12:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:39944636ac4959db64e4d68930a5736aeb2bcaba67f365cef8a229f0a3644f15
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn sdp.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt sdp.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+  ubuntu_18_04:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:ce9615387c6aeb63840123bbb6c2b5a900d2c42f14857aafeab03e5bfe4ce2bf
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn sdp.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt sdp.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+  opensuse_15_2_leap:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:804b0121b73f6d8deea112ac9b77a0153b2fffdb8515f36f0109244522e610c1
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn sdp.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt sdp.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+  centos_8:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:f218807f2613e6e2d3191e2106654180b8da9adae289810f80a70506ec02dfa3
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn sdp.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt sdp.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+  fedora_32:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:ac968fd011e820685599d23bbf71692822196667cada156be4f57cd7677d25f2
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn sdp.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt sdp.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package

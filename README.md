@@ -9,8 +9,8 @@ A (*very WIP*) pure OCaml implementation of [RFC 4566](https://tools.ietf.org/ht
 
 Todos: 
 
-  [ ] Better printing and encoding functions (some are not implemented yet...)
-  [ ] Better testing (could it use fuzzing or database of real-world SDPs?)
+ - [ ] Better printing and encoding functions (some are not implemented yet...)
+ - [ ] Better testing (could it use fuzzing or database of real-world SDPs?)
 
 ---
 
