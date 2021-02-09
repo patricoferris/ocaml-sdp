@@ -84,38 +84,6 @@ jobs:
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
       working-directory: /home/opam/package
-  ubuntu_20_04:
-    runs-on: ubuntu-latest
-    container:
-      image: ocaml/opam@sha256:c9b7efbf0aeefbd7cd8544e6007b5ab9becdce8d791354d7c2e5daffa8ce8da1
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e f50610b83f7bd9873916b764ef5ad84ef2d710aa
-        || git fetch origin master) && git reset -q --hard f50610b83f7bd9873916b764ef5ad84ef2d710aa
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - name: Pinning Packages
-      run: opam pin add -yn sdp.dev './'
-      working-directory: /home/opam/package
-    - name: Installing external dependencies
-      run: opam depext -yt sdp.dev
-      working-directory: /home/opam/package
-    - name: Installing dependencies
-      run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
-    - name: Building, installing & testing
-      run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   ubuntu_18_04:
     runs-on: ubuntu-latest
     container:
