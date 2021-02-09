@@ -1,0 +1,4 @@
+(library
+ (name sdp)
+ (public_name sdp)
+ (libraries angstrom uri mrmime emile))

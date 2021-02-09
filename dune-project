@@ -1,0 +1,16 @@
+(lang dune 2.7)
+(name sdp)
+(formatting disabled)
+(generate_opam_files true)
+(source (github patricoferris/ocaml-sdp))
+(authors "pf341@patricoferris.com")
+(maintainers "pf341@patricoferris.com")
+(package
+ (name sdp)
+ (synopsis "Pure OCaml implementation of SDP (RFC 4566)")
+ (depends
+  (alcotest (and (>= 1.2.3) :with-test))
+  (uri (>= 4.1.0))
+  (mrmime (>= 0.3.2))
+  (emile (>= 1.1))
+  angstrom))
